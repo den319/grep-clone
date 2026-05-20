@@ -29,3 +29,31 @@ pub fn search_case_insensitive(query: &str, contents: &str, path: &Path) -> Vec<
 pub fn is_binary(contents: &[u8]) -> bool {
     contents.contains(&0)
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_basic_search() {
+        let contents = "hello\nworld\nhello rust";
+
+        let results = search("hello", contents, std::path::Path::new("test.txt"));
+
+        assert_eq!(results.len(), 2);
+    }
+}
+
+#[test]
+fn test_ignore_case() {
+    let contents = "Hello\nHELLO\nworld";
+
+    let results = search_case_insensitive(
+        "hello",
+        contents,
+        std::path::Path::new("test.txt"),
+    );
+
+    assert_eq!(results.len(), 2);
+}
